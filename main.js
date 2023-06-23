@@ -1,92 +1,44 @@
-const form = document.getElementById("form-atividade");
-const imgAprovado = '<img src="./images/aprovado.png" alt="Emoji festejando" />'
-const imgReprovado = '<img src="./images/reprovado.png" alt="Emoji decepcionado" />'
-const atividades = [];
-const notas = [];
-const spanAprovado = `<span class="resultado aprovado"">Aprovado</span>`
-const spanReprovado = `<span class="resultado reprovado"">Reprovado</span>`
-const notaMinima = parseFloat(prompt("Digite a nota mínima:"))
+const form = document.getElementById("form-agenda");
+const contatos = [];
+const numerosTelefone = [];
 
-
-let linhas = ''; //essa variavel (escopo global) vai acumular as linhas das atividades e notas que vao ser acumuladas na tela, conforme o usuário clica em submit
+let linhas = ''; 
 
 form.addEventListener('submit', function(e){
     e.preventDefault();
+    const inputNomeContato = document.getElementById('nome-contato');
+    const inputNumeroContato = document.getElementById('numero-telefone')
 
     adicionaLinha();
     atualizaTabela();
-    atualizaMediaFinal();
 });
 
 function adicionaLinha(){
-    const inputNomeAtividade = document.getElementById('nome-atividade');
-    const inputNotaAtividade = document.getElementById('nota-atividade');
-
-    if(atividades.includes(inputNomeAtividade.value)){
-        alert(`A atividade ${inputNomeAtividade.value} já foi inserida`)
+    const inputNomeContato = document.getElementById('nome-contato');
+    const inputNumeroContato = document.getElementById('numero-telefone');
+    
+    if(contatos.includes(inputNomeContato.value)){
+        alert(`A contato ${inputNomeContato.value} já foi inserido`)
     }else{
-        atividades.push(inputNomeAtividade.value);
-        notas.push(parseFloat(inputNotaAtividade.value));
-    
-    //abaixo o trecho de código que compila cada linha inputada pelo usuário e ainda da com teste ternário o resultado aprovado ou reprovado
-    
+        
+        contatos.push(inputNomeContato.value);
+        numerosTelefone.push(inputNumeroContato.value);
+        
         let linha = '<tr>';
-        linha += `<td>${inputNomeAtividade.value}</td>`;
-        linha += `<td>${inputNotaAtividade.value}</td>`;
-        linha += `<td>${inputNotaAtividade.value >= notaMinima ? imgAprovado : imgReprovado}</td>`;
+        linha += `<td>${inputNomeContato.value}</td>`;
+        linha += `<td>${inputNumeroContato.value}</td>`;
         linha += `</tr>`;
-    
+        
         linhas += linha;
+        inputNomeContato.value = ''
+        inputNumeroContato.value = ''
     }
 
-    inputNomeAtividade.value = ''
-    inputNotaAtividade.value = ''
-}
-
+    }
+    
 function atualizaTabela(){
-    const corpoTabela = document.querySelector('tbody');
-    corpoTabela.innerHTML = linhas;
-    
-}
-
-function atualizaMediaFinal(){
-    const mediaFinal = calculaMediaFinal()
-
-    document.getElementById("media-final-valor").innerHTML = mediaFinal.toFixed(2);
-    document.getElementById("media-final-resultado").innerHTML = mediaFinal >= notaMinima? spanAprovado : spanReprovado;
-
-
-}
-
-function calculaMediaFinal(){
-    let somaDasNotas = 0;
-
-    for(let i = 0;i < notas.length; i++){
-        somaDasNotas += notas[i]
+        const corpoTabela = document.querySelector('tbody');
+        corpoTabela.innerHTML = linhas;
+        
     }
     
-    return somaDasNotas / notas.length;
-}
-
-
-/* abaixo a função de atualizar a média que fiz antes de ver a solução do professor! O estilo CSS nao ficou como do protótipo apresentado, mas a lógica funciona! 🥳🥳🥳🥳
-
-let somaDasNotas = 0;
-let mediaFinal = 0; //essas variaveis precisam estar no escopo global para o codigo funcionar
-
-function atualizaMediaFinal(){
-    
-    somaDasNotas += notas[notas.length - 1];
-    mediaFinal = somaDasNotas / notas.length;
-    let linhaMedia = '<tr>'
-    linhaMedia += '<td>Média final</td>'
-    linhaMedia += `<td>${mediaFinal}</td>`
-    linhaMedia += `<td>${mediaFinal >= notaMinima ? 'APROVADO!' : 'REPROVADO!'}</td>`;
-    linhaMedia += `</tr>`
-    
-    const footerTabela = document.querySelector('tfoot');
-    footerTabela.innerHTML = linhaMedia;
-}
-
-
-*/
